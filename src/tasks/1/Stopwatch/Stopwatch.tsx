@@ -1,21 +1,28 @@
-import React, {Component} from "react";
+import {useEffect, useState} from "react";
+import {StopwatchProps} from "./Stopwatch.props";
 
-interface IStopwatchProps {}
+const Stopwatch = ({
+    status = false,
+    runningTime = 0,
+    ...props
+}: StopwatchProps): JSX.Element => {
+    const [timerStatus, setTimerStatus] = useState<boolean>(status);
+    const [timerRunningTime, setTimerRunningTime] =
+        useState<number>(runningTime);
 
-interface IStopwatchState {
-    status: boolean;
-    runningTime: number;
-}
+    useEffect(() => {
+        if (timerStatus) {
+            const startTime = Date.now() - timerRunningTime;
+            const timer = setTimeout(() => {
+                setTimerRunningTime(Date.now() - startTime);
+            });
+            return () => {
+                clearInterval(timer);
+            };
+        }
+    }, [timerRunningTime, timerStatus]);
 
-class Stopwatch extends Component<IStopwatchProps, IStopwatchState> {
-    timer: any;
-
-    state = {
-        status: false,
-        runningTime: 0,
-    };
-
-    getUnits(time: number) {
+    const getUnits = (time: number): string => {
         const seconds = time / 1000;
 
         const min = Math.floor(seconds / 60).toString();
@@ -23,57 +30,27 @@ class Stopwatch extends Component<IStopwatchProps, IStopwatchState> {
         const msec = (seconds % 1).toFixed(3).substring(2);
 
         return `${min}:${sec}:${msec}`;
-    }
-
-    handleClick = () => {
-        this.setState((state) => {
-            if (state.status) {
-                clearInterval(this.timer);
-            } else {
-                const startTime = Date.now() - this.state.runningTime;
-                this.timer = setInterval(() => {
-                    this.setState({runningTime: Date.now() - startTime});
-                });
-            }
-            return {status: !state.status};
-        });
     };
-
-    handleReset = () => {
-        clearInterval(this.timer);
-        this.setState({runningTime: 0, status: false});
+    const handleClick = (): void => {
+        timerStatus ? setTimerStatus(false) : setTimerStatus(true);
     };
-
-    handleLap = () => {
-        console.log(this.getUnits(this.state.runningTime));
+    const handleReset = (): void => {
+        setTimerRunningTime(0);
+        setTimerStatus(false);
     };
-
-    componentWillUnmount() {
-        clearInterval(this.timer);
-    }
-
-    // leftPad = (width, n) => {
-    //     if ((n + '').length > width) {
-    //         return n;
-    //     }
-    //     const padding = new Array(width).join('0');
-    //     return (padding + n).slice(-width);
-    // };
-
-    render() {
-        const {status, runningTime} = this.state;
-
-        return (
-            <div>
-                <p>{this.getUnits(runningTime)}</p>
-                <button onClick={this.handleClick}>
-                    {status ? "Stop" : "Start"}
-                </button>
-                <button onClick={this.handleReset}>Reset</button>
-                <button onClick={this.handleLap}>Lap</button>
-            </div>
-        );
-    }
-}
+    const handleLap = () => {
+        console.log(getUnits(timerRunningTime));
+    };
+    return (
+        <div {...props}>
+            <p>{getUnits(timerRunningTime)}</p>
+            <button onClick={handleClick}>
+                {timerStatus ? "Stop" : "Start"}
+            </button>
+            <button onClick={handleReset}>Reset</button>
+            <button onClick={handleLap}>Lap</button>
+        </div>
+    );
+};
 
 export default Stopwatch;

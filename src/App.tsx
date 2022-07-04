@@ -1,5 +1,6 @@
 import React from "react";
-import Stopwatch from "src/tasks/1/Stopwatch";
+import Stopwatch from "./tasks/1/Stopwatch";
+//import {Stopwatch} from "./tasks/1/Stopwatch/Stopwatch";
 
 function App() {
     return (
