@@ -1,0 +1,69 @@
+.container {
+    width: 800px;
+    max-width: 100%;
+    overflow: hidden;
+    margin: auto;
+}
+.head {
+    display: flex;
+}
+
+.avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+}
+
+.text {
+    width: 400px;
+    max-width: 100%;
+    margin: 0;
+    margin-left: 150px;
+}
+
+.like {
+    display: flex;
+    align-items: top;
+    margin-left: auto;
+}
+
+.like svg {
+    transition: 0.2s all;
+    cursor: pointer;
+}
+
+.like svg:hover {
+    transform: scale(1.1);
+}
+
+.like span {
+    margin-left: 5px;
+    margin-top: 4px;
+}
+
+.comment {
+    margin-bottom: 20px;
+    background: rgb(253, 237, 237);
+    padding: 10px;
+    width: 600px;
+}
+
+.inner {
+    background: rgb(238, 180, 180);
+    margin-left: 100px;
+    position: relative;
+}
+
+.inner:before {
+    content: "";
+    width: 1px;
+    height: 20px;
+    top: -20px;
+    left: calc(50% - 6px);
+    position: absolute;
+    background: #000;
+}
